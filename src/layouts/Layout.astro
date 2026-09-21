@@ -1,0 +1,111 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = '株式・不動産、両方に実際にお金を入れてきた個人投資家が書く、住まいの本音メディア。',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title} | スミカラボ</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header
+      style="border-bottom: var(--border); background: var(--paper); position: sticky; top: 0; z-index: 10;"
+    >
+      <div
+        class="container"
+        style="height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 24px;"
+      >
+        <a href="/" style="display: flex; align-items: baseline; gap: 12px;">
+          <span class="display" style="font-weight: 900; font-size: 26px;">スミカラボ</span>
+          <span style="font-size: 12px; color: var(--muted); display: none;" class="tagline"
+            >by 個人投資家のヘヤ研究所</span
+          >
+        </a>
+        <nav style="display: flex; align-items: center; gap: 28px; flex-wrap: wrap;">
+          <a href="/category/entertainment" style="font-size: 14px; font-weight: 700;">ヘンな部屋</a>
+          <a href="/category/diagnosis" style="font-size: 14px; font-weight: 700;">妄想診断</a>
+          <a href="/category/serious" style="font-size: 14px; font-weight: 700;">大人の説明</a>
+          <a href="/category/story" style="font-size: 14px; font-weight: 700;">実録</a>
+          <a href="/contact" class="pill pill--ink" style="font-size: 13px;">相談する</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- TICKER -->
+    <div style="background: var(--ink); border-bottom: var(--border); overflow: hidden;">
+      <div
+        style="white-space: nowrap; padding: 12px 0; color: var(--paper); font-size: 13px; font-weight: 700;"
+      >
+        &nbsp;住まいの本音、たまに暴走、たまに真剣。★ 住まいの本音、たまに暴走、たまに真剣。★
+        住まいの本音、たまに暴走、たまに真剣。★ 住まいの本音、たまに暴走、たまに真剣。
+      </div>
+    </div>
+
+    <main>
+      <slot />
+    </main>
+
+    <!-- REFERRAL / EXIT -->
+    <section style="background: #fff; border-top: var(--border); padding: 56px 0;">
+      <div class="container" style="display: flex; flex-direction: column; gap: 28px;">
+        <div>
+          <h2 style="font-size: 24px; font-weight: 900;">困ったら、ここへ。</h2>
+          <p style="margin: 6px 0 0; font-size: 13px; color: var(--muted);">
+            診断・記事の内容に応じて、必要なものだけ紹介します。一斉営業はしません。
+          </p>
+        </div>
+        <div
+          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;"
+        >
+          <a
+            href="/go/loan"
+            style="border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 8px;"
+          >
+            <span style="font-size: 15px; font-weight: 700;">住宅ローンを比較する</span>
+            <span style="font-size: 12px; color: var(--muted-2);">借り換え・新規どちらも</span>
+          </a>
+          <a
+            href="/go/moving"
+            style="border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 8px;"
+          >
+            <span style="font-size: 15px; font-weight: 700;">引っ越し費用を見積もる</span>
+            <span style="font-size: 12px; color: var(--muted-2);">複数社まとめて</span>
+          </a>
+          <a
+            href="/contact"
+            style="border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 8px;"
+          >
+            <span style="font-size: 15px; font-weight: 700;">不動産会社に相談する</span>
+            <span style="font-size: 12px; color: var(--muted-2);">売却・賃貸活用など</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="background: var(--ink); color: var(--paper); padding: 32px 0;">
+      <div
+        class="container"
+        style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;"
+      >
+        <span class="display" style="font-weight: 900; font-size: 18px;">スミカラボ</span>
+        <span style="font-size: 12px; color: #b8af9c;">© 2026 スミカラボ</span>
+      </div>
+    </footer>
+  </body>
+</html>

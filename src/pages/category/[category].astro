@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const categoryMeta: Record<string, { label: string; sub: string }> = {
+  entertainment: { label: 'ヘンな部屋', sub: '物件レビュー' },
+  diagnosis: { label: '妄想診断', sub: 'シミュレーター' },
+  serious: { label: '大人の説明', sub: '資産形成ガイド' },
+  story: { label: '実録', sub: '自分の失敗談' },
+};
+
+export async function getStaticPaths() {
+  return Object.keys({
+    entertainment: 0,
+    diagnosis: 0,
+    serious: 0,
+    story: 0,
+  }).map((category) => ({ params: { category } }));
+}
+
+const { category } = Astro.params;
+const meta = categoryMeta[category as string];
+const articles = (await getCollection('articles'))
+  .filter((a) => a.data.category === category)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Layout title={meta?.label ?? 'カテゴリー'}>
+  <section class="container" style="padding: 56px 24px;">
+    <div style="margin-bottom: 32px;">
+      <h1 class="display" style="font-size: 34px; font-weight: 900;">{meta?.label}</h1>
+      <p style="margin: 6px 0 0; font-size: 13px; color: var(--muted);">{meta?.sub}</p>
+    </div>
+    <div
+      style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 320px)); justify-content: start; gap: 24px;"
+    >
+      {articles.map((article) => <ArticleCard article={article} />)}
+    </div>
+    {
+      articles.length === 0 && (
+        <p style="color: var(--muted-2); font-size: 14px;">まだ記事がありません。近日公開予定です。</p>
+      )
+    }
+  </section>
+</Layout>

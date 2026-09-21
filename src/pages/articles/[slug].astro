@@ -1,0 +1,35 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const dateLabel = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+}).format(article.data.date);
+---
+
+<Layout title={article.data.title} description={article.data.excerpt}>
+  <article class="container" style="padding: 56px 24px; max-width: 760px;">
+    <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px;">
+      <span style="font-size: 13px; color: var(--muted-2);">{dateLabel}</span>
+      <h1 style="font-size: clamp(26px, 4vw, 38px); font-weight: 900; line-height: 1.4;">
+        {article.data.title}
+      </h1>
+      <p style="font-size: 15px; color: var(--muted); margin: 0;">{article.data.excerpt}</p>
+    </div>
+    <div style="border-top: 2px solid var(--line); padding-top: 32px; font-size: 16px; line-height: 1.9;">
+      <Content />
+    </div>
+  </article>
+</Layout>

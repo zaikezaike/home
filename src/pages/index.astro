@@ -1,0 +1,111 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const allArticles = (await getCollection('articles')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const featured = allArticles.slice(0, 3);
+const rest = allArticles.slice(3);
+---
+
+<Layout title="トップページ">
+  <!-- PICK UP -->
+  <section class="container" style="padding: 64px 24px 48px;">
+    <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 32px;">
+      <h1
+        class="display"
+        style="font-size: clamp(40px, 6vw, 76px); font-weight: 900; -webkit-text-stroke: 3px var(--ink); color: var(--paper);"
+      >
+        今週のイチオシ
+      </h1>
+      <div
+        style="padding: 8px 20px; border: 3px solid var(--ink); border-radius: 999px; font-size: 14px; font-weight: 700; transform: rotate(-4deg); background: var(--paper);"
+      >
+        毎週更新
+      </div>
+    </div>
+    <div
+      style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 360px)); justify-content: start; gap: 32px;"
+    >
+      {featured.map((article) => <ArticleCard article={article} featured />)}
+    </div>
+  </section>
+
+  <!-- CATEGORY SHELF -->
+  <section
+    style="border-top: var(--border); border-bottom: var(--border); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));"
+  >
+    {
+      [
+        { href: '/category/entertainment', title: 'ヘンな部屋', sub: '物件レビュー' },
+        { href: '/category/diagnosis', title: '妄想診断', sub: 'シミュレーター' },
+        { href: '/category/serious', title: '大人の説明', sub: '資産形成ガイド' },
+        { href: '/category/story', title: '実録', sub: '自分の失敗談' },
+        { href: '/contact', title: '呼んだ？', sub: '専門家に相談' },
+      ].map((item, i, arr) => (
+        <a
+          href={item.href}
+          style={`padding: 28px 24px; display: flex; flex-direction: column; gap: 4px; ${i < arr.length - 1 ? 'border-right: 3px solid var(--ink);' : ''}`}
+        >
+          <span class="display" style="font-size: 20px; font-weight: 900;">
+            {item.title}
+          </span>
+          <span style="font-size: 12px; color: var(--muted);">{item.sub}</span>
+        </a>
+      ))
+    }
+  </section>
+
+  <!-- ARTICLE GRID -->
+  <section class="container" style="padding: 56px 24px;">
+    <h2 style="font-size: 26px; font-weight: 900; margin-bottom: 28px;">最近の記事</h2>
+    <div
+      style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 320px)); justify-content: start; gap: 24px;"
+    >
+      {rest.map((article) => <ArticleCard article={article} />)}
+    </div>
+  </section>
+
+  <!-- DIAGNOSIS CTA -->
+  <section class="container" style="padding: 0 24px 56px;">
+    <div
+      style="border: 3px solid var(--ink); border-radius: 20px; background: var(--accent2-soft); padding: 40px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap;"
+    >
+      <div style="display: flex; flex-direction: column; gap: 14px; max-width: 620px;">
+        <span
+          class="pill pill--outline"
+          style="align-self: flex-start; background: var(--paper);"
+        >
+          3分診断
+        </span>
+        <h2 style="font-size: 30px; font-weight: 900; line-height: 1.4;">
+          結局、賃貸がお得？買うのが得？
+        </h2>
+        <p style="margin: 0; font-size: 14px; color: #3b362c;">
+          遊び半分で始まりますが、裏側では家賃・金利・資産形成効果をちゃんと計算しています。
+        </p>
+      </div>
+      <a href="/shindan" class="btn">診断してみる →</a>
+    </div>
+  </section>
+
+  <!-- WRITER -->
+  <section class="container" style="padding: 0 24px 64px; display: flex; gap: 32px; align-items: center; flex-wrap: wrap;">
+    <div
+      style="width: 120px; height: 120px; border-radius: 50%; background: #e9dfc8; border: 3px solid var(--ink); flex-shrink: 0;"
+    >
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; max-width: 700px;">
+      <span style="font-size: 13px; font-weight: 700; color: var(--muted-2);">書いている人</span>
+      <h3 style="font-size: 20px; font-weight: 900;">
+        含み損も含み益も、両方経験した個人投資家です。
+      </h3>
+      <p style="margin: 0; font-size: 14px; color: #3b362c;">
+        株式と不動産、両方に実際にお金を入れてきた立場から書いています。ネタ記事もまじめな記事も、数字の部分は本気です。
+      </p>
+    </div>
+  </section>
+</Layout>

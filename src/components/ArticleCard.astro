@@ -1,0 +1,56 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  article: CollectionEntry<'articles'>;
+  featured?: boolean;
+}
+
+const { article, featured = false } = Astro.props;
+const { title, excerpt, category, date, readingMinutes, badge } = article.data;
+
+const categoryLabel: Record<string, string> = {
+  entertainment: 'エンタメ枠',
+  diagnosis: '妄想診断',
+  serious: '大人の説明',
+  story: '実録',
+};
+
+const pillClass: Record<string, string> = {
+  entertainment: 'pill--accent',
+  diagnosis: 'pill--ink',
+  serious: 'pill--outline',
+  story: 'pill--ink',
+};
+
+const dateLabel = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+}).format(date);
+---
+
+<a
+  href={`/articles/${article.slug}`}
+  class="card"
+  style={featured ? 'position: relative; overflow: hidden;' : 'position: relative;'}
+>
+  {
+    badge && (
+      <div
+        style="position: absolute; top: 14px; left: -40px; width: 150px; text-align: center; background: var(--accent); color: #fff; font-size: 11px; font-weight: 900; padding: 4px 0; transform: rotate(-45deg); z-index: 1;"
+      >
+        {badge}
+      </div>
+    )
+  }
+  <div class="card__thumb"></div>
+  <div class="card__body">
+    <span class={`pill ${pillClass[category]}`}>{categoryLabel[category]}</span>
+    <div style="font-size: 16px; font-weight: 700; line-height: 1.5;">{title}</div>
+    <div style="font-size: 12px; color: var(--muted-2);">
+      {dateLabel}
+      {readingMinutes ? ` ・ ${readingMinutes}分` : ''}
+    </div>
+  </div>
+</a>
